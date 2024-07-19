@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stores-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stores
+  template:
+    metadata:
+      labels:
+        app: stores
+    spec:
+      containers:
+        - name: stores
+          image: rgustilo87/stores
+          env:
+            - name: FEED_URL
+              value: https://feeds.brightoncollectibles.com/get?feed=bristore
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stores-clusterip-srv
+spec:
+  selector:
+    app: stores
+  ports:
+    - name: stores
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
